@@ -131,9 +131,14 @@ with st.sidebar:
     )
 
     st.markdown("---")
-    use_spark = st.toggle("PySpark backend", value=True,
-                          help="Toggle between PySpark and pure Pandas ETL")
-    st.caption("Both produce identical results — PySpark is used for the ETL pipeline; Pandas drives all chart computations.")
+    from pipeline import SPARK_OK
+    if SPARK_OK:
+        use_spark = st.toggle("PySpark backend", value=True,
+                              help="Toggle between PySpark and pure Pandas ETL")
+        st.caption("PySpark available locally. Streamlit Cloud uses the Pandas backend — identical results.")
+    else:
+        use_spark = False
+        st.info("⚡ Running Pandas backend\n(PySpark needs a local JVM)")
 
     st.markdown("---")
     st.markdown("**Data sources**")
